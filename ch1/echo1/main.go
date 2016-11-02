@@ -1,4 +1,4 @@
-// Echo1 prints its command-line arguments.
+// Echo1 выводит аргументы командной строки.
 package main
 
 import (
