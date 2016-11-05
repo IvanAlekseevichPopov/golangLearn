@@ -8,7 +8,6 @@ import (
 	"image"
 	"image/color"
 	"image/gif"
-	// "io"
 	"math"
 	"math/rand"
 	"time"
@@ -24,20 +23,18 @@ func main() {
 
 //Обработчик
 func lissajous(out http.ResponseWriter, r *http.Request) {
-	cycles := 5
-	if res := r.URL.Query().Get("cycles"); res != "" {
-		cycles := par(r.URL.Query().Get("cycles"))
-	}
-
-	fmt.Printf("%s %s\n", r.URL.Query().Get("cycles"))
-
 	const (
-		// cycles  = 5     // Количество полных колебаний х
 		res     = 0.001 // Угловое разрешение
 		size    = 100   // Канва изображения охватывает [size..+size]
 		nframes = 64    //Количество кадров анимации
 		delay   = 8     // Задержка между кадрами (единица - 10мс)
 	)
+
+	cycles := 5.0
+	if res := r.URL.Query().Get("cycles"); res != "" {
+		cycles, _ := strconv.ParseFloat(res, 64)
+		fmt.Printf("%v", cycles)		
+	}
 	rand.Seed(time.Now().UTC().UnixNano())
 	freq := rand.Float64() * 3.0 //Относительная частота колебаний
 	anim := gif.GIF{LoopCount: nframes}
@@ -46,7 +43,7 @@ func lissajous(out http.ResponseWriter, r *http.Request) {
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
 		colorIndex := uint8(rand.Intn(2) + 1)
-		for t := 0.0; t < cycles*2*math.Pi; t += res {
+		for t := 0.0; t < cycles*2.0*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
 			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), colorIndex)
