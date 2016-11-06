@@ -3,15 +3,15 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 	"image"
 	"image/color"
 	"image/gif"
+	"log"
 	"math"
 	"math/rand"
-	"time"
+	"net/http"
 	"strconv"
+	"time"
 )
 
 var palette = []color.Color{color.Black, color.RGBA{0, 128, 0, 255}, color.RGBA{255, 0, 0, 255}}
@@ -30,10 +30,10 @@ func lissajous(out http.ResponseWriter, r *http.Request) {
 		delay   = 8     // Задержка между кадрами (единица - 10мс)
 	)
 
-	cycles := 5.0
+	var cycles = 5.0
 	if res := r.URL.Query().Get("cycles"); res != "" {
-		cycles, _ := strconv.ParseFloat(res, 64)
-		fmt.Printf("%v", cycles)		
+		cycles, _ = strconv.ParseFloat(res, 64)
+		fmt.Printf("%v", cycles)
 	}
 	rand.Seed(time.Now().UTC().UnixNano())
 	freq := rand.Float64() * 3.0 //Относительная частота колебаний
@@ -43,6 +43,7 @@ func lissajous(out http.ResponseWriter, r *http.Request) {
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
 		colorIndex := uint8(rand.Intn(2) + 1)
+		fmt.Printf("%v", cycles)
 		for t := 0.0; t < cycles*2.0*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
